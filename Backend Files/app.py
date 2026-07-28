@@ -5,6 +5,7 @@ from config import Config
 from extensions import db, bcrypt
 from routes.health import health_bp
 from routes.auth import auth_bp
+from routes.profile import profile_bp
 
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
 
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(profile_bp)
 
     return app
 
