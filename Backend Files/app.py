@@ -7,6 +7,7 @@ from routes.health import health_bp
 from routes.auth import auth_bp
 from routes.profile import profile_bp
 from routes.internships import internships_bp
+from routes.recommendations import recommendations_bp
 
 
 def create_app():
@@ -21,6 +22,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(profile_bp)
     app.register_blueprint(internships_bp)
+    app.register_blueprint(recommendations_bp)
 
     return app
 
@@ -29,4 +31,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-    
