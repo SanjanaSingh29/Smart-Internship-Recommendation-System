@@ -1,0 +1,13 @@
+skill,demand,category,difficulty
+Python,100,Programming,Easy
+SQL,95,Database,Easy
+Git,90,Tools,Easy
+Docker,88,DevOps,Medium
+Linux,86,Tools,Medium
+AWS,97,Cloud,Medium
+Azure,80,Cloud,Medium
+React,89,Frontend,Medium
+Node.js,84,Backend,Medium
+TensorFlow,70,AI,Hard
+PyTorch,74,AI,Hard
+Kubernetes,78,DevOps,Hard
