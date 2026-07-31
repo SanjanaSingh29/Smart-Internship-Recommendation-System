@@ -74,7 +74,7 @@ Smart-Internship-Recommendation-System/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/SanjanaSingh29/Smart-Internship-Recommendation-System.git
+https://github.com/SanjanaSingh29/Smart-Internship-Recommendation-System.git
 ```
 
 ---
