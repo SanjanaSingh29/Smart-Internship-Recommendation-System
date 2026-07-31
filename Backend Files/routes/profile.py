@@ -1,53 +1,26 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 from extensions import db
-from models import Student
-from auth_utils import token_required
+from models import Student, StudentSkill, Recommendation, Application
 
-profile_bp = Blueprint("profile", __name__)
+profile_bp = Blueprint('profile', __name__, url_prefix='/api')
 
+@profile_bp.route('/users/<int:student_id>', methods=['DELETE'])
+def delete_student_account(student_id):
+    try:
+        student = Student.query.get(student_id)
 
-@profile_bp.route("/api/profile", methods=["GET"])
-@token_required
-def get_profile(current_student_id):
-    """Get the logged-in student's profile."""
-    student = Student.query.get(current_student_id)
+        if not student:
+            return jsonify({"error": "Student not found in database"}), 404
 
-    if not student:
-        return jsonify({"error": "Student not found"}), 404
+        StudentSkill.query.filter_by(student_id=student_id).delete()
+        Recommendation.query.filter_by(student_id=student_id).delete()
+        Application.query.filter_by(student_id=student_id).delete()
 
-    return jsonify({
-        "id": student.id,
-        "name": student.name,
-        "email": student.email,
-        "education": student.education,
-        "created_at": student.created_at.isoformat() if student.created_at else None
-    }), 200
+        db.session.delete(student)
+        db.session.commit()
 
+        return jsonify({"message": "Student account and profile deleted successfully"}), 200
 
-@profile_bp.route("/api/profile", methods=["PUT"])
-@token_required
-def update_profile(current_student_id):
-    """Update the logged-in student's profile."""
-    data = request.get_json()
-
-    student = Student.query.get(current_student_id)
-
-    if not student:
-        return jsonify({"error": "Student not found"}), 404
-
-    if "name" in data:
-        student.name = data["name"]
-    if "education" in data:
-        student.education = data["education"]
-
-    db.session.commit()
-
-    return jsonify({
-        "message": "Profile updated successfully",
-        "student": {
-            "id": student.id,
-            "name": student.name,
-            "email": student.email,
-            "education": student.education
-        }
-    }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500 

@@ -1,36 +1,35 @@
-function Input({
+export default function Input({
   label,
-  type,
-  placeholder,
+  type = "text",
   value,
   onChange,
-  showPassword,
-  togglePassword,
+  placeholder,
+  required = false,
+  className = "",
 }) {
   return (
-    <div className="mb-4">
-      <label className="block mb-2 text-sm font-medium text-white">{label}</label>
+    <div className="w-full space-y-1">
+      {label && (
+        <label className="block text-sm font-semibold text-white">
+          {label}
+        </label>
+      )}
 
-      <div className="relative">
-        <input
+      <input
         type={type}
-        placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="mt-2 w-full rounded-lg border border-blue-600 bg-blue-700 px-4 py-3 pr-12 text-white focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        />
-
-        {togglePassword && (
-          <button
-          type="button"
-          onClick={togglePassword}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
-          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        )}
-      </div>
+        placeholder={placeholder}
+        required={required}
+        className={`w-full rounded-lg border border-slate-300 bg-white px-4 py-3
+        text-black
+        placeholder:text-gray-500
+        caret-black
+        focus:outline-none
+        focus:ring-2
+        focus:ring-blue-500
+        ${className}`}
+      />
     </div>
   );
 }
-
-export default Input;

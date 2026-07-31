@@ -1,17 +1,29 @@
 from extensions import db
+from sqlalchemy import CheckConstraint
 
 
 class Student(db.Model):
     __tablename__ = "students"
 
     id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    education = db.Column(db.String(255))
+
+    qualification = db.Column(db.String(100))
+    course = db.Column(db.String(100))
+    college = db.Column(db.String(150))
+    year = db.Column(db.String(20))
+    cgpa = db.Column(db.Float)
+
+    __table_args__ = (
+        CheckConstraint("cgpa >= 0 AND cgpa <= 10", name="check_cgpa"),
+    )
+
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-
+    
 class Skill(db.Model):
     __tablename__ = "skills"
 

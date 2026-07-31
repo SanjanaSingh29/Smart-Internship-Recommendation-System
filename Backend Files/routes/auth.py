@@ -1,72 +1,95 @@
 from flask import Blueprint, request, jsonify
 from extensions import db, bcrypt
 from models import Student
-import jwt
-import datetime
-from flask import current_app
 
-auth_bp = Blueprint("auth", __name__)
+# Ensure auth_bp is explicitly defined here
+auth_bp = Blueprint('auth', __name__, url_prefix='/api')
 
-
-@auth_bp.route("/api/register", methods=["POST"])
+@auth_bp.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
+    try:
+        data = request.get_json() or {}
 
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
-    education = data.get("education", "")
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+        cgpa_raw = data.get('cgpa')
 
-    if not name or not email or not password:
-        return jsonify({"error": "Name, email, and password are required"}), 400
+        if not name or not email or not password:
+            return jsonify({"error": "Please provide name, email, and password"}), 400
 
-    existing_student = Student.query.filter_by(email=email).first()
-    if existing_student:
-        return jsonify({"error": "Email already registered"}), 409
+        # Check existing user
+        existing_student = Student.query.filter_by(email=email).first()
+        if existing_student:
+            return jsonify({"error": "An account with this email already exists"}), 400
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        # Handle optional CGPA safely
+        cgpa_value = 0.0
+        if cgpa_raw is not None and cgpa_raw != "":
+            try:
+                parsed_cgpa = float(cgpa_raw)
+                if 0.0 <= parsed_cgpa <= 10.0:
+                    cgpa_value = parsed_cgpa
+                else:
+                    return jsonify({"error": "Invalid CGPA. Must be between 0.0 and 10.0"}), 400
+            except (ValueError, TypeError):
+                return jsonify({"error": "Invalid CGPA format"}), 400
 
-    new_student = Student(
-        name=name,
-        email=email,
-        password_hash=hashed_password,
-        education=education
-    )
+        # Hash password
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    db.session.add(new_student)
-    db.session.commit()
+        # Create new student record (using password_hash)
+        new_student = Student(
+            name=name,
+            email=email,
+            password_hash=hashed_password,
+            cgpa=cgpa_value
+        )
 
-    return jsonify({"message": "Student registered successfully", "student_id": new_student.id}), 201
+        db.session.add(new_student)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Registration successful",
+            "token": f"token-{new_student.id}",
+            "student": {
+                "id": new_student.id,
+                "name": new_student.name,
+                "email": new_student.email,
+                "cgpa": new_student.cgpa
+            }
+        }), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 
-@auth_bp.route("/api/login", methods=["POST"])
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
+    try:
+        data = request.get_json() or {}
+        email = data.get('email')
+        password = data.get('password')
 
-    email = data.get("email")
-    password = data.get("password")
+        if not email or not password:
+            return jsonify({"error": "Please enter both email and password"}), 400
 
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+        student = Student.query.filter_by(email=email).first()
 
-    student = Student.query.filter_by(email=email).first()
+        if not student or not bcrypt.check_password_hash(student.password_hash, password):
+            return jsonify({"error": "Invalid email or password"}), 401
 
-    if not student or not bcrypt.check_password_hash(student.password_hash, password):
-        return jsonify({"error": "Invalid email or password"}), 401
+        return jsonify({
+            "message": "Login successful",
+            "token": f"token-{student.id}",
+            "student": {
+                "id": student.id,
+                "name": student.name,
+                "email": student.email,
+                "cgpa": student.cgpa
+            }
+        }), 200
 
-    token = jwt.encode(
-        {
-            "student_id": student.id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(
-                minutes=current_app.config["JWT_ACCESS_TOKEN_EXPIRES_MIN"]
-            )
-        },
-        current_app.config["JWT_SECRET_KEY"],
-        algorithm="HS256"
-    )
-
-    return jsonify({
-        "message": "Login successful",
-        "token": token,
-        "student": {"id": student.id, "name": student.name, "email": student.email}
-    }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
