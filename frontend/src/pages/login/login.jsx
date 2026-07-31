@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Input from "../../components/ui/Input";
+import Input from "../../components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/auth";
