@@ -1,49 +1,46 @@
 # Smart Internship Recommendation System
 
-## 📌 Overview
-The Smart Internship Recommendation System is a web application that helps students discover internships based on their skills, interests, and profile. The platform provides personalized internship recommendations and allows students to manage their applications efficiently.
+A web-based platform that helps students discover internships based on their skills, interests, and profile. The system provides internship recommendations, profile management, application tracking, and an intuitive dashboard.
 
----
+## 🚀 Live Demo
 
-## 🚀 Features
-
-- Student Registration & Login
-- Secure Authentication
-- Personalized Dashboard
-- Internship Recommendations
-- Search Internships
-- Saved Internships
-- Apply for Internships
-- Profile Management
-- Skills Management
-- Application Tracking
-- Responsive UI
-
----
+Frontend (Vercel):
+https://smart-internship-recommendation-sys-three.vercel.app/
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- React.js
+- React
 - Vite
 - JavaScript
-- CSS
+- Tailwind CSS
 - Axios
 
 ### Backend
 - Flask
-- Flask SQLAlchemy
-- Flask Bcrypt
-- Flask CORS
-
-### Database
+- Python
 - MySQL
 
 ### AI Engine
 - Python
-- Machine Learning (Recommendation Engine)
+- Machine Learning
 
----
+## ✨ Features
+
+- User Registration & Login
+- Student Dashboard
+- Internship Recommendations
+- Search Internships
+- Saved Internships
+- Application Tracking
+- Student Profile Management
+- Skills Management
+
+## 👨‍💻 Team Members
+
+- **Sanjana Singh** – Frontend Development
+- **Aryan** – Backend Development
+- **Atharva** – AI Recommendation Engine
 
 ## 📂 Project Structure
 
@@ -51,94 +48,17 @@ The Smart Internship Recommendation System is a web application that helps stude
 Smart-Internship-Recommendation-System/
 │
 ├── frontend/
-│   ├── src/
-│   ├── public/
-│   └── package.json
-│
 ├── Backend Files/
-│   ├── routes/
-│   ├── models/
-│   ├── Database/
-│   ├── app.py
-│   └── requirements.txt
-│
 ├── ai engine/
-│
 └── README.md
 ```
 
----
+## 📌 Note
 
-## ⚙️ Installation
+The frontend is deployed on Vercel.
 
-### Clone Repository
+Some dynamic features (such as login, registration, profile updates, and internship data) require the backend service to be deployed. Until the backend deployment is complete, these features may not function on the live website.
 
-```bash
-https://github.com/SanjanaSingh29/Smart-Internship-Recommendation-System.git
-```
+## 📄 Repository
 
----
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
-
-### Backend
-
-```bash
-cd "Backend Files"
-pip install -r requirements.txt
-python app.py
-```
-
----
-
-## 🌐 API Base URL
-
-```
-http://localhost:5173/
-```
-
----
-
-## 📸 Screenshots
-
-Add screenshots here after completing the project.
-
-- Login Page
-- Dashboard
-- Recommendation Page
-- Profile Page
-- Internship Search
-
----
-
-## 🔮 Future Improvements
-
-- Resume Upload
-- AI-based Resume Analysis
-- Email Notifications
-- Company Portal
-- Admin Dashboard
-- Real-time Internship Updates
-- Interview Preparation Assistant
-
----
-
-## 👥 Team Members
-
-- Sanjana Singh
-- Aryan
-- Atharav
-
----
-
-## 📄 License
-
-This project is developed for educational purposes.
+https://github.com/SanjanaSingh29/Smart-Internship-Recommendation-System
