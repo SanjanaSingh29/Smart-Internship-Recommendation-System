@@ -542,11 +542,20 @@ export default function Dashboard() {
               <Heart size={16} className="text-red-500 fill-red-500" /> Saved Internships
             </h2>
             <div className="flex flex-wrap gap-2">
-              {["Amazon", "Adobe", "Netflix"].map((item, idx) => (
-                <span key={idx} className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer transition">
-                  {item}
-                </span>
-              ))}
+              {JSON.parse(localStorage.getItem("savedInternships") || "[]").length === 0 ? (
+                <p className="text-xs text-white">
+                  No saved internships yet.
+                </p>
+              ) : (
+                JSON.parse(localStorage.getItem("savedInternships") || "[]").map((job) => (
+                  <span
+                    key={job.id}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200"
+                  >
+                    {job.company}
+                  </span>
+                ))
+              )}
             </div>
           </section>
         </div>

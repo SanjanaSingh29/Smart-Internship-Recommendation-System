@@ -16,6 +16,9 @@ export default function Internships() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     return new Set(saved);
   });
+  const [savedJobs, setSavedJobs] = useState(() => {
+    return JSON.parse(localStorage.getItem("savedInternships") || "[]");
+  });
   const [activeModalInternship, setActiveModalInternship] = useState(null);
 
   // Fetch internships from your backend database on mount
@@ -93,6 +96,22 @@ export default function Internships() {
       });
       setActiveModalInternship(null);
     }
+  };
+  const handleSave = (internship) => {
+    const exists = savedJobs.some((job) => job.id === internship.id);
+    if (exists) {
+      alert("Already saved!");
+      return;
+    }
+
+    const updated = [...savedJobs, internship];
+    setSavedJobs(updated);
+    localStorage.setItem(
+      "savedInternships",
+      JSON.stringify(updated)
+    );
+
+    alert("Internship saved successfully!");
   };
 
   if (loading) {
@@ -218,18 +237,25 @@ export default function Internships() {
                   </span>
                   <div className="flex gap-2">
                     <button
+                      onClick={() => handleSave(internship)}
+                      className="px-3 py-1.5 text-xs font-medium bg-red-500 hover:bg-red-600 text-white rounded-md"
+                    >
+                      ❤️ Saved
+                    </button>
+                    <button
                       onClick={() => setActiveModalInternship(internship)}
-                      className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md"
                     >
                       View Details
                     </button>
+
                     <button
                       onClick={() => handleApply(id)}
                       disabled={isApplied}
-                      className={`px-3 py-1.5 text-xs font-medium text-white rounded-md transition-colors ${
+                      className={`px-3 py-1.5 text-xs font-medium text-white rounded-md ${
                         isApplied
-                          ? "bg-emerald-600 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-emerald-600 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
                       }`}
                     >
                       {isApplied ? "Applied ✓" : "Apply Now"}

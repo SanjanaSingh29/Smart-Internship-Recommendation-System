@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:5000/api",
+  baseURL: "https://smart-internship-recommendation-system-q0f1.onrender.com/api",
 });
 
 // Intercept requests to attach Authorization Token if present
