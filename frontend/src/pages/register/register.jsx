@@ -61,7 +61,12 @@ function Register() {
   return (
     <div className="min-h-screen bg-blue-900 flex items-center justify-center p-4">
       <div className="bg-blue-800 rounded-2xl p-8 shadow-lg text-white w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center">Create Account</h1>
+        <h1 className="text-3xl font-bold text-center">
+          Welcome to Internly AI
+        </h1>
+        <h2 className="text-lg font-semibold mt-2">
+          Create your account
+        </h2>
         <p className="mt-2 text-center text-sm text-blue-100">
           Get personalized internship recommendations in 2 minutes.
         </p>

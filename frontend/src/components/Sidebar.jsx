@@ -38,7 +38,7 @@ export default function Sidebar() {
           <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-lg">
             IP
           </div>
-          <h2 className="text-xl font-bold text-white tracking-wide">InternPortal</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">Internly AI</h2>
         </div>
 
         {/* Main Navigation */}

@@ -82,8 +82,12 @@ function Login() {
     <div className="min-h-screen bg-blue-900 flex items-center justify-center p-4">
       <div className="bg-blue-800 rounded-2xl p-8 shadow-lg text-center text-white w-full max-w-md">
         <h1 className="text-2xl font-bold">
-          Smart Internship Recommendation System
+          Welcome Back! to Internly AI
         </h1>
+        <h2 className="text-lg font-semibold mt-2">
+          Login to your account
+        </h2>
+        <h3>Smart Internship Recommendation System</h3>
         <p className="mt-3 text-sm text-blue-100">
           Find internships based on your skills and interests.
         </p>
