@@ -84,7 +84,7 @@ function Login() {
         <h1 className="text-2xl font-bold">
           Welcome Back! to Internly AI
         </h1>
-        <h2 className="text-lg font-semibold mt-2">
+        <h2 className="text-lg font-semibold mt-2 flex items-center justify-center gap-2">
           Login to your account
         </h2>
         <h3>Smart Internship Recommendation System</h3>
