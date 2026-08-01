@@ -64,7 +64,7 @@ function Register() {
         <h1 className="text-3xl font-bold text-center">
           Welcome to Internly AI
         </h1>
-        <h2 className="text-lg font-semibold mt-2">
+        <h2 className="text-lg font-semibold mt-2 flex items-center justify-center gap-2">
           Create your account
         </h2>
         <p className="mt-2 text-center text-sm text-blue-100">
