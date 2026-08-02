@@ -62,7 +62,7 @@ function Register() {
     <div className="min-h-screen bg-blue-900 flex items-center justify-center p-4">
       <div className="bg-blue-800 rounded-2xl p-8 shadow-lg text-white w-full max-w-md">
         <h1 className="text-3xl font-bold text-center">
-          Welcome to Internly AI
+          Welcome Back! to Intern AI
         </h1>
         <h2 className="text-lg font-semibold mt-2 flex items-center justify-center gap-2">
           Create your account

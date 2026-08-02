@@ -38,7 +38,7 @@ export default function Sidebar() {
           <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-lg">
             I
           </div>
-          <h2 className="text-xl font-bold text-white tracking-wide">Internly AI</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">Intern AI</h2>
         </div>
 
         {/* Main Navigation */}
