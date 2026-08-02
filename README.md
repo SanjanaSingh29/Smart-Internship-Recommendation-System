@@ -5,7 +5,7 @@ A web-based platform that helps students discover internships based on their ski
 ## 🚀 Live Demo
 
 Frontend (Vercel):
-https://smart-internship-recommendation-sys-three.vercel.app/
+https://smart-internship-recommendation-sys.vercel.app/
 
 ## 🛠️ Tech Stack
 
