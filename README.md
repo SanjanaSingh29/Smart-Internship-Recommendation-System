@@ -1,4 +1,4 @@
-# Inter AI-Smart Internship Recommendation System
+# Intern AI-Smart Internship Recommendation System
 
 A web-based platform that helps students discover internships based on their skills, interests, and profile. The system provides internship recommendations, profile management, application tracking, and an intuitive dashboard.
 
