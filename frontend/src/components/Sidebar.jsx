@@ -36,7 +36,7 @@ export default function Sidebar() {
         {/* App Branding */}
         <div className="px-3 py-2 flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-lg">
-            IP
+            I
           </div>
           <h2 className="text-xl font-bold text-white tracking-wide">Internly AI</h2>
         </div>

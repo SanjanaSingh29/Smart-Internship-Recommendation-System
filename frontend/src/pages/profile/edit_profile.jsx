@@ -98,21 +98,40 @@ export default function EditProfile() {
 
   // Experience handlers
   const handleAddExperience = () => {
+    console.log("handleAddExperience called");
+
+    console.log("Role:", expRole);
+    console.log("Company:", expCompany);
+
     if (expRole.trim() && expCompany.trim()) {
       const newExp = {
         role: expRole.trim(),
         company: expCompany.trim(),
         duration: expDuration.trim() || "Present",
-        description: expDesc.trim()
+        description: expDesc.trim(),
       };
-      setFormData({ ...formData, experiences: [...formData.experiences, newExp] });
+
+      console.log("Adding:", newExp);
+
+      setFormData((prev) => {
+        const updated = {
+          ...prev,
+          experiences: [...prev.experiences, newExp],
+        };
+
+        console.log("Updated experiences:", updated.experiences);
+
+        return updated;
+      });
+
       setExpRole("");
       setExpCompany("");
       setExpDuration("");
       setExpDesc("");
+    } else {
+      console.log("Role or company is empty");
     }
   };
-
   const handleRemoveExperience = (index) => {
     setFormData({
       ...formData,
@@ -144,6 +163,9 @@ export default function EditProfile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    console.log("Saving formData:", formData);
+
     localStorage.setItem("student", JSON.stringify(formData));
     navigate("/profile");
   };
@@ -331,10 +353,13 @@ export default function EditProfile() {
               ></textarea>
               <button
                 type="button"
-                onClick={handleAddExperience}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-900 text-white rounded-xl flex items-center gap-1 font-semibold"
+                onClick={() => {
+                  console.log("Button clicked");
+                  handleAddExperience();
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-900 text-white rounded-xl"
               >
-                <Plus size={14} /> Add Experience
+                Add Experience
               </button>
             </div>
 

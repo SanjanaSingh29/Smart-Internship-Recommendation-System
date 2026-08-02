@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import {
@@ -7,7 +7,15 @@ import {
 } from "lucide-react";
 
 
+
+
 export default function Dashboard() {
+
+  console.log("THIS IS THE DASHBOARD FILE I AM EDITING");
+
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notificationRef = useRef(null);
+  const [unreadCount, setUnreadCount] = useState(5);
   const navigate = useNavigate();
   const [student, setStudent] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,10 +28,49 @@ export default function Dashboard() {
     const localStudent = JSON.parse(localStorage.getItem("student") || "{}");
     setStudent(localStudent);
 
-    // Load actual user applications from localStorage
-    const savedApplications = JSON.parse(localStorage.getItem("applications") || "[]");
+    console.log("Student:", localStudent);
+    console.log("Projects:", localStudent.projects);
+
+  // Load actual user applications from localStorage
+    const savedApplications = JSON.parse(
+      localStorage.getItem("applications") || "[]"
+    );
     setApplications(savedApplications);
   }, []);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    }
+
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        setShowNotifications(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+  const handleSaveInternship = (internship) => {
+    const saved =JSON.parse(localStorage.getItem("savedInternships")) || [];
+    const alreadySaved = saved.some((item) => item.id === internship.id);
+    if (alreadySaved) return;
+    const updated = [...saved, internship];
+    localStorage.setItem(
+      "savedInternships",
+      JSON.stringify(updated)
+    );
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,6 +88,8 @@ export default function Dashboard() {
   console.log("Student:", student);
   console.log("Student skills:", student.skills);
   console.log("Parsed userSkills:", userSkills);
+  console.log("Dashboard student:", student);
+  console.log("Dashboard projects:", student.projects);
 
   // Check if resume is present in student state
   const hasResume = Boolean(student.resume || student.resumeUploaded || student.resumeUrl);
@@ -58,6 +107,14 @@ export default function Dashboard() {
       workMode: "On-site",
       stipend: "₹50,000/month",
       requiredSkills: ["React", "JavaScript", "Python"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
     {
       id: "2",
@@ -68,6 +125,14 @@ export default function Dashboard() {
       workMode: "Hybrid",
       stipend: "₹45,000/month",
       requiredSkills: ["React", "HTML", "CSS"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
     {
       id: "3",
@@ -78,6 +143,14 @@ export default function Dashboard() {
       workMode: "On-site",
       stipend: "₹60,000/month",
       requiredSkills: ["Python", "SQL", "DSA"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
     {
       id: "4",
@@ -88,6 +161,14 @@ export default function Dashboard() {
       workMode: "Hybrid",
       stipend: "₹40,000/month",
       requiredSkills: ["Python", "SQL"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
     {
       id: "5",
@@ -98,6 +179,14 @@ export default function Dashboard() {
       workMode: "Remote",
       stipend: "₹55,000/month",
       requiredSkills: ["React", "JavaScript"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
     {
       id: "6",
@@ -108,6 +197,14 @@ export default function Dashboard() {
       workMode: "On-site",
       stipend: "₹35,000/month",
       requiredSkills: ["Python", "SQL", "MongoDB"],
+      saveButton: (
+        <button
+          onClick={() => handleSaveInternship(item)}
+          className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 rounded-lg"
+        >
+          ❤️ Save
+        </button>
+      ),
     },
   ];
 
@@ -149,9 +246,54 @@ export default function Dashboard() {
         missingSkills: missing,
       };
     });
+  const notifications = [];
+  if (!hasResume) {
+    notifications.push({
+      type: "warning",
+      message: "Upload your resume to improve your profile score."
+    });
+  }
 
+  if (student.projects?.length === 0) {
+    notifications.push({
+      type: "info",
+      message: "Add your projects to attract recruiters."
+    });
+  }
 
-  
+  if (userSkills.length < 5) {
+    notifications.push({
+      type: "info",
+      message: "Add more skills to improve internship recommendations."
+    });
+  }
+
+  notifications.push({
+    type: "deadline",
+    message: "Google Internship deadline: 2 Aug 2026"
+  });
+
+  notifications.push({
+    type: "deadline",
+    message: "Microsoft Internship deadline: 5 Aug 2026"
+  });
+
+  const matchedInternships = processedInternships.filter(
+    job => job.match >= 80
+  );
+
+  if (matchedInternships.length > 0) {
+    notifications.push({
+      type: "success",
+      message: `${matchedInternships.length} internships match your profile.`
+    });
+  } else {
+    notifications.push({
+      type: "info",
+      message: "No internships match your profile yet. Keep adding skills!"
+    });
+  }
+
   // Filter based on search query, location, and work mode
   const filteredInternships = processedInternships.filter((job) => {
     const matchesSearch =
@@ -188,10 +330,52 @@ export default function Dashboard() {
             >
               <User size={16} /> Profile
             </Link>
-            <button className="p-2 bg-blue-700 hover:bg-slate-700 rounded-lg text-white transition relative">
+            <button
+              onClick={() => {
+                setShowNotifications(!showNotifications);
+                if (!showNotifications) {
+                  setUnreadCount(0);
+                }
+              }}
+              className="p-2 bg-blue-700 hover:bg-slate-700 rounded-lg relative transition"
+            >
               <Bell size={18} />
-              <span className="w-2 h-2 bg-red-600/10 border border-red-500/20 rounded-full absolute top-1.5 right-1.5"></span>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
             </button>
+            {showNotifications && (
+              <div 
+                ref={notificationRef} 
+                className="absolute top-12 right-0 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden">
+                <div className="p-4 border-b">
+                  <h2 className="font-bold text-slate-800 text-lg">
+                    🔔 Notifications
+                  </h2>
+                </div>
+                <div className="max-h-96 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <p className="p-5 text-center text-slate-500">
+                      No new notifications.
+                    </p>
+                  ) : (
+                    notifications.map((item, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border-b hover:bg-slate-50 cursor-pointer transition"
+                      >
+                        <p className="text-sm text-slate-700">
+                          {item.message}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+              
+            )}
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 px-3 py-2 bg-blue-700 hover:bg-red-600/20 text-white rounded-lg text-sm font-semibold transition"
@@ -509,7 +693,6 @@ export default function Dashboard() {
           </section>
 
         </div>
-
         {/* GRID: RECENT APPLICATIONS & SAVED INTERNSHIPS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* 7. RECENTLY APPLIED */}
@@ -535,8 +718,49 @@ export default function Dashboard() {
               </div>
             )}
           </section>
+          {/* 8. My Projects */}
+          <section className="bg-blue-700 p-4 rounded-2xl border border-blue-700 shadow-sm min-h-[220px]">
+            <h2 className="text-base font-bold text-white mb-4">
+              🚀 My Projects
+            </h2>
 
-          {/* 8. SAVED INTERNSHIPS */}
+            {student.projects && student.projects.length > 0 ? (
+              <div className="space-y-3">
+                {student.projects.map((project, index) => (
+                  <div
+                    key={index}
+                    className="bg-blue-800 p-4 rounded-xl border border-blue-600"
+                  >
+                    <h3 className="font-semibold text-white">
+                      {project.title}
+                    </h3>
+
+                    <p className="text-sm text-slate-300 mt-1">
+                      {project.description}
+                    </p>
+
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-300 hover:underline text-sm mt-2 inline-block"
+                      >
+                        View Project →
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+            <p className="text-slate-400">
+              No projects added yet.
+              </p>
+            )}
+          </section>
+
+
+          {/* 9. SAVED INTERNSHIPS */}
           <section className="bg-blue-700 p-6 rounded-2xl border border-blue-700 shadow-sm">
             <h2 className="text-base font-bold text-white mb-4 flex items-center gap-1.5">
               <Heart size={16} className="text-red-500 fill-red-500" /> Saved Internships
@@ -562,7 +786,7 @@ export default function Dashboard() {
 
         {/* GRID: TRENDING SKILLS, LEARNING RECOMMENDATIONS, UPCOMING DEADLINES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* 9. TRENDING SKILLS */}
+          {/* 10. TRENDING SKILLS */}
           <section className="bg-blue-700 p-6 rounded-2xl border border-blue-700 shadow-sm space-y-3">
             <h2 className="text-base font-bold text-white flex items-center gap-1.5">
               <TrendingUp size={16} className="text-blue-700" /> Trending Skills
@@ -576,7 +800,7 @@ export default function Dashboard() {
             </div>
           </section>
 
-          {/* 10. LEARNING RECOMMENDATIONS */}
+          {/* 11. LEARNING RECOMMENDATIONS */}
           <section className="bg-blue-700 p-6 rounded-2xl border border-blue-700 shadow-sm space-y-3">
             <h2 className="text-base font-bold text-white flex items-center gap-1.5">
               <BookOpen size={16} className="text-white" /> Recommended Learning
@@ -588,7 +812,7 @@ export default function Dashboard() {
             </div>
           </section>
 
-          {/* 11. UPCOMING DEADLINES */}
+          {/* 12. UPCOMING DEADLINES */}
           <section className="bg-blue-700 p-6 rounded-2xl border border-blue-700 shadow-sm space-y-3">
             <h2 className="text-base font-bold text-white flex items-center gap-1.5">
               <Clock size={16} className="text-amber-600" /> Upcoming Deadlines

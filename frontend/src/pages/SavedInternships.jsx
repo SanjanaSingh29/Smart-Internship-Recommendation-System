@@ -4,12 +4,16 @@ import { Heart, Trash2, ExternalLink, Building, MapPin } from "lucide-react";
 
 export default function SavedInternships() {
   const [savedJobs, setSavedJobs] = useState([]);
+  const [savedInternships, setSavedInternships] = useState([]);
 
   useEffect(() => {
-    // Load saved internships from localStorage or your backend API
-    const saved = JSON.parse(localStorage.getItem("savedInternships") || "[]");
-    setSavedJobs(saved);
+    const saved =JSON.parse(localStorage.getItem("savedInternships")) || [];
+    setSavedInternships(saved);
   }, []);
+  savedInternships.map(job => {
+    job.postedDate = new Date(job.postedDate).toLocaleDateString();
+    return job;
+  });
 
   const removeJob = (id) => {
     const updated = savedJobs.filter((job) => job.id !== id);

@@ -6,11 +6,22 @@ function Applications() {
   const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const studentData = localStorage.getItem("student");
+  const student = studentData ? JSON.parse(studentData) : null;
+  const studentId = student?.id || null;
 
   useEffect(() => {
+    const apps =JSON.parse(localStorage.getItem("applications")) || [];
+
+    setApplications(apps);
     fetchApplications();
   }, []);
-
+  applications.map(app => {
+    app.appliedDate = new Date(app.appliedDate).toLocaleDateString();
+    return app;
+  });
+  
+  
   const fetchApplications = async () => {
     try {
       setLoading(true);
@@ -71,7 +82,7 @@ function Applications() {
               </Link>
             </div>
           </div>
-        ) : (
+        ) : ( 
           /* LIST STATE */
           <div className="bg-blue-700 rounded-xl shadow-sm border overflow-hidden">
             <div className="overflow-x-auto">
