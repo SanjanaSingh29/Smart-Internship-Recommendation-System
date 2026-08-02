@@ -1,4 +1,4 @@
-# Smart Internship Recommendation System
+# Inter AI-Smart Internship Recommendation System
 
 A web-based platform that helps students discover internships based on their skills, interests, and profile. The system provides internship recommendations, profile management, application tracking, and an intuitive dashboard.
 
@@ -56,6 +56,7 @@ Smart-Internship-Recommendation-System/
 ## 📌 Note
 
 The frontend is deployed on Vercel.
+The backend is deployed on Render.
 
 Some dynamic features (such as login, registration, profile updates, and internship data) require the backend service to be deployed. Until the backend deployment is complete, these features may not function on the live website.
 
